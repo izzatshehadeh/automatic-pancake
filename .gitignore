@@ -1,0 +1,9 @@
+*.json
+*.dll
+*.pdb
+.vs/*
+izBackend/.vs/*
+izBackend/bin/*
+izBackend/obj/*
+izBackend/appsettings.json
+izBackend/appsettings.Development.json
