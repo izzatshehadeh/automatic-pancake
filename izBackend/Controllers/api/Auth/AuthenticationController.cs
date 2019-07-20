@@ -57,6 +57,7 @@ namespace izBackend.Controllers.Authentication
             return Ok(new APIResponseSuccess(_localizer["UserCreatedSuccess"].Value));
         }
 
+        [Authorize]
         [HttpPost("refresh")]
         public IActionResult RefreshtToken([FromBody] RefreshTokenRequest request)
         {
@@ -71,7 +72,7 @@ namespace izBackend.Controllers.Authentication
                     APIResponse<AuthResponse> result = new APIResponse<AuthResponse>(res);
                     return Ok(result);
                 }
-                return Ok(new APIResponseError( _localizer["Invalid User"].Value));
+                return Ok(new APIResponseError( _localizer["FailedToRenewToken"].Value));
             }
             return Ok(new APIResponseError(_localizer["Invalid User"].Value));
         }

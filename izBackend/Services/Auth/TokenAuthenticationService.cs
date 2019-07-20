@@ -44,10 +44,10 @@ namespace izBackend.Services.Auth
 
 
             TokenManagement token = _config.GetSection("tokenManagement").Get<TokenManagement>();
-            if (User.Claims.First(i => i.Type == "aud").Value == token.FirebaseProject)
-            {
-                return  User.Claims.First(i => i.Type == "user_id").Value;
-            }
+            //if (User.Claims.First(i => i.Type == "aud").Value == token.FirebaseProject)
+            //{
+            //    return  User.Claims.First(i => i.Type == "user_id").Value;
+            //}
             return  User.Claims.First(i => i.Type == "user_id").Value;
         }
 
@@ -55,15 +55,12 @@ namespace izBackend.Services.Auth
         public bool RenewToken(RefreshTokenRequest request, out AuthResponse res)
         {
 
-            string userId = string.Empty;
-            string token = string.Empty;
-            string refreshToken = string.Empty;
             res = new AuthResponse();
 
 
-            if(_db.RefreshTokens.Any(x => x.User.Id.ToString() == request.UserID && x.Token == request.RefreshToken))
+            if(_db.RefreshTokens.Any(x => x.User.Username.ToString() == request.UserID && x.Token == request.RefreshToken))
             {
-                User user = _db.Users.FirstOrDefault(x => x.Id.ToString().ToLower() == request.UserID.ToLower());
+                User user = _db.Users.FirstOrDefault(x => x.Username.ToLower() == request.UserID.ToLower());
                 return GenerateTokensFromUser(out res, user);
             }
 
@@ -78,7 +75,7 @@ namespace izBackend.Services.Auth
                         {
                 new Claim(ClaimTypes.Name, user.Username),
                 new Claim(ClaimTypes.AuthenticationMethod , nameof(user.Source) ),
-                new Claim("user_id", user.Id.ToString()),
+                new Claim("user_id", user.Username.ToString()),
                 new Claim("aud",  nameof(user.Source))
             };
 
